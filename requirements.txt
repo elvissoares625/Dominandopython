@@ -1,3 +1,4 @@
+requests
 django>=5.0
 django-allauth>=65.0
 pillow>=10.0
