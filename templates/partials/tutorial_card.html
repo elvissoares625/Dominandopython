@@ -1,0 +1,20 @@
+<article class="card">
+  {% if tutorial.imagem_capa %}
+    <img src="{{ tutorial.imagem_capa.url }}" alt="{{ tutorial.titulo }}" class="card__img">
+  {% endif %}
+  <div class="card__body">
+    <div class="card__meta">
+      <span class="badge badge--{{ tutorial.nivel }}">{{ tutorial.get_nivel_display }}</span>
+      <span class="card__tempo">{{ tutorial.tempo_leitura }} min</span>
+    </div>
+    <h3 class="card__titulo">
+      <a href="{{ tutorial.get_absolute_url }}">{{ tutorial.titulo }}</a>
+    </h3>
+    <p class="card__resumo">{{ tutorial.resumo }}</p>
+    <div class="card__tags">
+      {% for tag in tutorial.tags.all %}
+        <a href="{% url 'tutoriais:lista' %}?tag={{ tag.slug }}" class="tag">{{ tag.nome }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</article>

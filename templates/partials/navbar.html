@@ -1,0 +1,26 @@
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<header class="navbar">
+  <div class="container navbar__inner">
+    <a href="{% url 'core:home' %}" class="navbar__logo">
+      <span class="logo-icon">
+          <i class="fa-brands fa-python"></i>
+      </span>
+      dominando<strong>python</strong>
+    </a>
+    <nav class="navbar__links">
+      <a href="{% url 'tutoriais:lista' %}">Tutoriais</a>
+      <!--<a href="#">Trilhas</a>-->
+      <a href="{% url 'core:sobre' %}">Sobre</a>
+    </nav>
+    <div class="navbar__auth">
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:perfil' %}" class="btn btn--ghost">{{ user.nome_exibicao }}</a>
+        <a href="{% url 'account_logout' %}" class="btn btn--outline">Sair</a>
+      {% else %}
+        <a href="{% url 'account_login' %}" class="btn btn--ghost">Entrar</a>
+        <a href="{% url 'account_signup' %}" class="btn btn--primary">Começar grátis</a>
+      {% endif %}
+    </div>
+  </div>
+</header>

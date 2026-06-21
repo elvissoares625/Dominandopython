@@ -1,0 +1,53 @@
+{% extends "account/base_auth_split.html" %}
+{% load allauth %}
+{% block titulo %}Entrar{% endblock %}
+
+{% block auth_filename %}auth.py{% endblock %}
+{% block auth_prompt %}login{% endblock %}
+
+{% block auth_code %}<span class="cm"># autentica o aluno</span>
+<span class="kw">def</span> <span class="fn">autenticar</span>(email, senha):
+    aluno = Aluno.buscar(email)
+
+    <span class="kw">if</span> aluno.senha_ok(senha):
+        <span class="kw">return</span> <span class="str">"bem-vindo de volta"</span>
+
+    <span class="kw">raise</span> CredenciaisInvalidas<span class="cursor"></span>{% endblock %}
+
+{% block auth_form_content %}
+<h1>Entre na sua conta</h1>
+<p class="auth-sub">Continue suas trilhas de onde parou.</p>
+
+<form method="post" action="{% url 'account_login' %}" class="auth-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="{{ form.login.id_for_label }}">Email</label>
+    {{ form.login }}
+    {% if form.login.errors %}<p class="field-error">{{ form.login.errors.0 }}</p>{% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="{{ form.password.id_for_label }}">Senha</label>
+    {{ form.password }}
+    {% if form.password.errors %}<p class="field-error">{{ form.password.errors.0 }}</p>{% endif %}
+  </div>
+
+  <div class="form-row">
+    <label class="checkbox-label">
+      {{ form.remember }} Lembrar de mim
+    </label>
+    <a href="{% url 'account_reset_password' %}" class="auth-link">Esqueceu a senha?</a>
+  </div>
+
+  {{ redirect_field }}
+  <button type="submit" class="btn btn--primary btn--lg btn--block">Entrar</button>
+</form>
+
+<p class="auth-footer">
+  Não tem conta? <a href="{% url 'account_signup' %}">Cadastre-se grátis</a>
+</p>
+{% endblock %}

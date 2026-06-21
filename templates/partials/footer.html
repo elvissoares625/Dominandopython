@@ -1,0 +1,20 @@
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span>🐍</span>
+      <strong>dominandopython.com</strong>
+      <p>Aprenda Python com projetos reais, do zero ao profissional.</p>
+    </div>
+    <form class="footer__newsletter" action="{% url 'core:assinar_newsletter' %}" method="post">
+      {% csrf_token %}
+      <p>Newsletter semanal</p>
+      <div class="input-group">
+        <input type="email" name="email" placeholder="seu@email.com" required>
+        <button type="submit" class="btn btn--primary">Assinar</button>
+      </div>
+    </form>
+  </div>
+  <div class="footer__bottom container">
+    <small>&copy; {% now "Y" %} Dominando Python. Feito com Django.</small>
+  </div>
+</footer>

@@ -1,0 +1,5 @@
+.env
+/media
+.env.example
+db.sqlite3
+/venv

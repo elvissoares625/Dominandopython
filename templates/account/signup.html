@@ -1,0 +1,53 @@
+{% extends "account/base_auth_split.html" %}
+{% load allauth %}
+{% block titulo %}Criar conta{% endblock %}
+
+{% block auth_filename %}cadastro.py{% endblock %}
+{% block auth_prompt %}cadastro{% endblock %}
+
+{% block auth_code %}<span class="cm"># cria um novo aluno</span>
+<span class="kw">class</span> <span class="fn">NovoAluno</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, email, senha):
+        self.email = email
+        self.trilha_atual = <span class="str">"Python do Zero"</span>
+        self.progresso = 0
+
+    <span class="kw">def</span> <span class="fn">comecar</span>(self):
+        <span class="kw">return</span> <span class="str">"bons estudos"</span><span class="cursor"></span>{% endblock %}
+
+{% block auth_form_content %}
+<h1>Crie sua conta grátis</h1>
+<p class="auth-sub">Comece suas trilhas e acompanhe seu progresso em Python.</p>
+
+<form method="post" action="{% url 'account_signup' %}" class="auth-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <div class="form-group">
+    <label for="{{ form.email.id_for_label }}">Email</label>
+    {{ form.email }}
+    {% if form.email.errors %}<p class="field-error">{{ form.email.errors.0 }}</p>{% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="{{ form.password1.id_for_label }}">Senha</label>
+    {{ form.password1 }}
+    {% if form.password1.errors %}<p class="field-error">{{ form.password1.errors.0 }}</p>{% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="{{ form.password2.id_for_label }}">Confirmar senha</label>
+    {{ form.password2 }}
+    {% if form.password2.errors %}<p class="field-error">{{ form.password2.errors.0 }}</p>{% endif %}
+  </div>
+
+  {{ redirect_field }}
+  <button type="submit" class="btn btn--primary btn--lg btn--block">Criar conta</button>
+</form>
+
+<p class="auth-footer">
+  Já tem conta? <a href="{% url 'account_login' %}">Entrar</a>
+</p>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}Aprenda Python com projetos reais{% endblock %}
+
+{% block conteudo %}
+<section class="hero">
+  <div class="container">
+    <span class="badge">Em português, do zero ao profissional</span>
+    <h1>Aprenda Python com <em>projetos reais</em><br>e saia do tutorial hell</h1>
+    <p>Trilhas estruturadas, exercícios práticos e projetos para o portfólio. Sem enrolação.</p>
+    <div class="hero__actions">
+      <a href="{% url 'tutoriais:lista' %}" class="btn btn--primary btn--lg">Ver tutoriais</a>
+      <a href="{% url 'account_signup' %}" class="btn btn--outline btn--lg">Criar conta grátis</a>
+    </div>
+  </div>
+</section>
+
+{% if tutoriais_destaque %}
+<section class="section">
+  <div class="container">
+    <h2 class="section__titulo">Em destaque</h2>
+    <div class="grid grid--3">
+      {% for tut in tutoriais_destaque %}
+        {% include "partials/tutorial_card.html" with tutorial=tut %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section section--alt">
+  <div class="container">
+    <h2 class="section__titulo">Tutoriais recentes</h2>
+    <div class="grid grid--2">
+      {% for tut in tutoriais_recentes %}
+        {% include "partials/tutorial_card.html" with tutorial=tut %}
+      {% endfor %}
+    </div>
+    <div class="section__cta">
+      <a href="{% url 'tutoriais:lista' %}" class="btn btn--outline">Ver todos os tutoriais</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

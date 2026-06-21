@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block titulo %}{{ tutorial.titulo }}{% endblock %}
+{% block meta_descricao %}{{ tutorial.resumo }}{% endblock %}
+
+{% block conteudo %}
+<div class="container container--narrow page">
+  <header class="tutorial__header">
+    <div class="tutorial__meta">
+      <span class="badge badge--{{ tutorial.nivel }}">{{ tutorial.get_nivel_display }}</span>
+      <span>{{ tutorial.tempo_leitura }} min de leitura</span>
+      <span>{{ tutorial.publicado_em|date:"d/m/Y" }}</span>
+    </div>
+    <h1>{{ tutorial.titulo }}</h1>
+    <p class="tutorial__resumo">{{ tutorial.resumo }}</p>
+    <div class="tutorial__tags">
+      {% for tag in tutorial.tags.all %}
+        <a href="{% url 'tutoriais:lista' %}?tag={{ tag.slug }}" class="tag">{{ tag.nome }}</a>
+      {% endfor %}
+    </div>
+  </header>
+
+  <div class="tutorial__conteudo prose">
+    {{ tutorial.conteudo|safe }}
+  </div>
+
+  {% if user.is_authenticated %}
+  <div class="tutorial__concluir">
+    <button
+      id="btn-concluir"
+      class="btn {% if ja_leu %}btn--success{% else %}btn--outline{% endif %}"
+      data-slug="{{ tutorial.slug }}"
+      data-url="{% url 'tutoriais:marcar_concluido' tutorial.slug %}"
+    >
+      {% if ja_leu %}✅ Concluído{% else %}Marcar como concluído{% endif %}
+    </button>
+  </div>
+  {% endif %}
+
+  {% if relacionados %}
+  <aside class="tutorial__relacionados">
+    <h3>Continue aprendendo</h3>
+    <div class="grid grid--3">
+      {% for tut in relacionados %}
+        {% include "partials/tutorial_card.html" with tutorial=tut %}
+      {% endfor %}
+    </div>
+  </aside>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const btn = document.getElementById("btn-concluir");
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      const res = await fetch(btn.dataset.url, {
+        method: "POST",
+        headers: {"X-CSRFToken": "{{ csrf_token }}"},
+      });
+      const data = await res.json();
+      btn.textContent = data.concluido ? "✅ Concluído" : "Marcar como concluído";
+      btn.className = data.concluido ? "btn btn--success" : "btn btn--outline";
+    });
+  }
+</script>
+{% endblock %}

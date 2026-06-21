@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block titulo %}Meu Perfil{% endblock %}
+
+{% block conteudo %}
+<div class="container page">
+  <div class="perfil">
+    <aside class="perfil__sidebar">
+      {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="{{ user.nome_exibicao }}" class="perfil__avatar">
+      {% else %}
+        <div class="perfil__avatar-placeholder">{{ user.nome_exibicao|first|upper }}</div>
+      {% endif %}
+      <h2>{{ user.nome_exibicao }}</h2>
+      <span class="badge badge--{{ user.nivel }}">{{ user.get_nivel_display }}</span>
+      {% if user.bio %}<p>{{ user.bio }}</p>{% endif %}
+      {% if user.github_url %}<a href="{{ user.github_url }}" target="_blank">GitHub</a>{% endif %}
+      <a href="{% url 'accounts:editar_perfil' %}" class="btn btn--outline btn--sm">Editar perfil</a>
+    </aside>
+
+    <main class="perfil__main">
+      <div class="stats-grid">
+        <div class="stat">
+          <span class="stat__num">{{ total_lidos }}</span>
+          <span class="stat__label">Tutoriais concluídos</span>
+        </div>
+      </div>
+
+      <h3>Leituras recentes</h3>
+      {% if leituras_recentes %}
+        <ul class="leituras-lista">
+          {% for leitura in leituras_recentes %}
+            <li class="leitura-item">
+              <a href="{{ leitura.tutorial.get_absolute_url }}">{{ leitura.tutorial.titulo }}</a>
+              {% if leitura.concluido %}<span class="badge badge--success">✅ Concluído</span>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Você ainda não leu nenhum tutorial. <a href="{% url 'tutoriais:lista' %}">Comece agora!</a></p>
+      {% endif %}
+    </main>
+  </div>
+</div>
+{% endblock %}

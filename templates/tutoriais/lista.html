@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block titulo %}Tutoriais Python{% endblock %}
+
+{% block conteudo %}
+<div class="container page">
+  <header class="page__header">
+    <h1>Tutoriais</h1>
+    <p>Aprenda Python passo a passo com exemplos práticos e projetos reais.</p>
+  </header>
+
+  <div class="filters">
+    <form method="get" class="filters__busca">
+      <input type="search" name="q" value="{{ busca|default:'' }}" placeholder="Buscar tutorial...">
+      <button type="submit" class="btn btn--primary">Buscar</button>
+    </form>
+    <div class="filters__nivel">
+      <a href="{% url 'tutoriais:lista' %}" class="pill {% if not nivel_ativo %}pill--ativo{% endif %}">Todos</a>
+      <a href="?nivel=iniciante" class="pill {% if nivel_ativo == 'iniciante' %}pill--ativo{% endif %}">Iniciante</a>
+      <a href="?nivel=intermediario" class="pill {% if nivel_ativo == 'intermediario' %}pill--ativo{% endif %}">Intermediário</a>
+      <a href="?nivel=avancado" class="pill {% if nivel_ativo == 'avancado' %}pill--ativo{% endif %}">Avançado</a>
+    </div>
+    {% if tags %}
+    <div class="filters__tags">
+      {% for tag in tags %}
+        <a href="?tag={{ tag.slug }}" class="tag {% if tag_ativa == tag.slug %}tag--ativa{% endif %}">{{ tag.nome }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if tutoriais %}
+    <div class="grid grid--2">
+      {% for tut in tutoriais %}
+        {% include "partials/tutorial_card.html" with tutorial=tut %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">
+      <p>Nenhum tutorial encontrado. Tente outros filtros.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

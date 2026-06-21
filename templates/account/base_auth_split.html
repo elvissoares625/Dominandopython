@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="container auth-page">
+  <div class="auth-shell">
+    <div class="auth-code">
+      <div class="auth-code__chrome">
+        <span class="auth-code__dot auth-code__dot--red"></span>
+        <span class="auth-code__dot auth-code__dot--yellow"></span>
+        <span class="auth-code__dot auth-code__dot--green"></span>
+        <span class="auth-code__filename">{% block auth_filename %}auth.py{% endblock %}</span>
+      </div>
+      <pre>{% block auth_code %}{% endblock %}</pre>
+    </div>
+    <div class="auth-form-panel">
+      <div class="auth-prompt">~/dominandopython <span class="accent">$</span> {% block auth_prompt %}{% endblock %}</div>
+      {% block auth_form_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
