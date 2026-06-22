@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
+    "cloudinary_storage",
+    "cloudinary",
 
     # Nossos apps
     "core",
@@ -128,6 +130,22 @@ else:
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Vercel (e outras plataformas serverless) têm sistema de arquivos somente leitura,
+# então uploads (avatar, capa de tutorial) não podem ser salvos em disco local.
+# Se as credenciais do Cloudinary estiverem definidas, usamos storage na nuvem.
+# Sem elas (dev local), cai para o storage padrão em MEDIA_ROOT.
+CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
+
+if CLOUDINARY_CLOUD_NAME:
+    CLOUDINARY_STORAGE = {
+        "CLOUD_NAME": CLOUDINARY_CLOUD_NAME,
+        "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+        "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+    }
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+else:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 # ─── Email ────────────────────────────────────────────────────────────────────
 EMAIL_BACKEND = os.getenv(

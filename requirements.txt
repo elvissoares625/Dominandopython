@@ -6,7 +6,8 @@ pillow>=10.0
 python-dotenv>=1.0
 whitenoise>=6.0
 psycopg[binary]
-
+django-cloudinary-storage 
+cloudinary
 # Produção
 # gunicorn>=21.0
 # psycopg2-binary>=2.9
